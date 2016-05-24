@@ -1,9 +1,9 @@
-C-ookie-parser
+querystr.h
 ====
-Simple cookie parser written in C using [Object.h](https://github.com/flickerapps/Object.h) lib.
+Simple query string parse written in C using [Object.h](https://github.com/flickerapps/Object.h) lib.
 
 ```c
-#include "cookiep.h"
+#include "querystr.h"
 
 int main(int args, const char* argv[]){
     return 0;
