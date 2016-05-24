@@ -1,6 +1,6 @@
 querystr.h
 ====
-Simple query string parse written in C using [Object.h](https://github.com/flickerapps/Object.h) lib.
+Simple query string parse written in C using [Object.h](https://github.com/flickerapps/Objecth) lib.
 
 ```c
 #include "querystr.h"
@@ -17,6 +17,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 ```
+
 License
 ====
 [MIT](LICENSE)
