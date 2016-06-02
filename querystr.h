@@ -69,7 +69,12 @@ char* stringify(var parsed, const char* delim1, const char* delim2, int mode){
             strncat(strgify, item->getKey(item), strlen(item->getKey(item)));
             strncat(strgify, delim1, strlen(delim1));
             strncat(strgify, item->getString(item), strlen(item->getString(item)));
-            strncat(strgify, delim2, strlen(delim2));
+            if(item->next == NULL){
+                if(mode > 0) strncat(strgify, delim2, strlen(delim2));
+            }
+            else{
+                strncat(strgify, delim2, strlen(delim2));
+            }
             item = item->next;
         }
     }
