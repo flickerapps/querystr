@@ -3,7 +3,12 @@
 
 int main(int argc, char const *argv[])
 {
-    var query = querystr("foo=bar&lorem=ipsum&content=helloworld");
+    var query = querystr(
+        "foo=bar&lorem=ipsum&content=helloworld",
+        '&', /* delimiter for items */
+        '=', /* delimiter for key/val */
+        QUERY_SOFT /* mode = not remove spaces, '\n', '\r' or '\t' */
+        );
     var foo = query->find(query,"foo");
     printf("%s : %s\n",
         foo->getKey(foo), /* key */

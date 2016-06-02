@@ -9,41 +9,71 @@
 #ifndef QUERYSTR_H
 #define QUERYSTR_H
 
-#include "modules/Objecth/Object.h"
+#include "modules/Object.h/Object.h"
 #include "modules/libstr/libstr.h"
+#include <stdio.h>
 
-
-int queryalone(const char* str, int i, int  ini, var parsed){
-    int origin = ini;
-    int fin = i-1;
-    char* keyst = substr((char*)str, ini, fin);
-    var key = ObjectCreate((const char*)keyst);
-    int fin_val = indexOfSub('&', (char*)str, fin);
-    char* value;
-    if(fin_val == -1){ /* one key/val */
-        value = substr((char*)str, fin + 2, strlen(str) - 1);
-    }
-    else{ /* two or more keys/vals */
-        value = substr((char*)str, fin + 2, fin_val - 1);
-        ini = fin_val + 1;
-    }
-    if (value[strlen(value)]){
-        value[strlen(value)] = '\0';
-    }
-    key->setString(key, (const char*) value);
-    if(origin == 0){ parsed->setChild(parsed, key); }
-    else { parsed->appendChild(parsed, key); }
-    return ini;
-}
-var querystr(const char* str){
-    var parsed = ObjectCreate("querystr");
+#define QUERY_HARD 1
+#define QUERY_SOFT 1
+var querystr(const char* str, char delim1, char delim2, int mode){
+    char* nstr = (char*)calloc(strlen(str) + 1, sizeof(char));
+    strncpy(nstr, str, strlen(str));
+    var parsed = ObjectCreate((char*)"querystr");
     int ini = 0;
-    for(int i = 0 ; i < strlen(str) ; i++){
-        if( str[i] == '='){
-            ini = queryalone(str, i, ini, parsed);
+    int i;
+    char** splited = strsplit(delim1, (char*)str);
+    char rem[] = " \n\r\t";
+    char remsoft[] = "\r\n\t";
+    char** item;
+    for(i = 0; i < arraylen(splited) ; i++){
+        item = strsplit(delim2, splited[i]);
+        if(item[1] != NULL){
+            if(mode == QUERY_HARD){
+                item[0] = removechars(rem, item[0]);
+                item[1] = removechars(rem, item[1]);
+            }
+            var child = ObjectCreate(item[0]);
+            child->setString(child, item[1]);
+            if(parsed->value == NULL){
+                parsed->setChild(parsed, child);
+            }
+            else{
+                parsed->appendChild(parsed, child);
+            }
+        }
+        else{
+            if(mode == QUERY_HARD){
+                item[0] = removechars(remsoft, item[0]);
+            }
         }
     }
     return parsed;
 }
 
+char* stringify(var parsed, const char* delim1, const char* delim2, int mode){
+    /*
+    * if mode is 0 not include delim2 in last item.
+    */
+    char* strgify = (char*)calloc(1, sizeof(char));
+    int stlen = 0;
+    if(parsed->value == NULL){
+        return (char*)"Empty";
+    }
+    else{
+        var item = parsed->getChild(parsed);
+        int itemlen = 0;
+        while(item != NULL){
+            itemlen += strlen(item->getKey(item)) + strlen(delim1) + strlen(item->getString(item)) + strlen(delim2);
+            stlen += itemlen;
+            strgify = (char*)realloc(strgify, sizeof(char) * stlen);
+            strncat(strgify, item->getKey(item), strlen(item->getKey(item)));
+            strncat(strgify, delim1, strlen(delim1));
+            strncat(strgify, item->getString(item), strlen(item->getString(item)));
+            strncat(strgify, delim2, strlen(delim2));
+            item = item->next;
+        }
+    }
+    strgify[stlen] = '\0';
+    return strgify;
+}
 #endif
