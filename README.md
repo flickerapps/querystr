@@ -2,6 +2,16 @@ querystr.h
 ====
 Simple query string parse written in C using [Object.h](https://github.com/flickerapps/Objecth) lib.
 
+
+Use
+====
+
+clone the repo and add the modules:
+```
+ $ git clone https://github.com/flickerapps/querystr.git --recurse-submodules
+```
+
+
 ```c
 #include "querystr.h"
 
