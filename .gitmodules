@@ -1,0 +1,6 @@
+[submodule "modules/Objecth"]
+	path = modules/Objecth
+	url = https://github.com/flickerapps/Objecth.git
+[submodule "modules/libstr"]
+	path = modules/libstr
+	url = https://github.com/flickerapps/libstr.git
