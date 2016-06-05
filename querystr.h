@@ -9,7 +9,7 @@
 #ifndef QUERYSTR_H
 #define QUERYSTR_H
 
-#include "modules/Object.h/Object.h"
+#include "modules/Objecth/Object.h"
 #include "modules/libstr/libstr.h"
 #include <stdio.h>
 
